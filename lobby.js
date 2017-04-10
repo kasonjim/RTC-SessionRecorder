@@ -47,6 +47,7 @@ document.getElementById('close-room').onclick = function() {
     });
   } else {
     connection.leave();
+    connection.close();
   }
 };
 
@@ -55,9 +56,10 @@ document.getElementById('close-room').onclick = function() {
 /////////////////////////////////////////////////////////////////////////
 var connection = new RTCMultiConnection();
 // by default, socket.io server is assumed to be deployed on your own URL
-connection.socketURL = '/';
+// connection.socketURL = '/';
 // comment-out below line if you do not have your own socket.io server
 // connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
+connection.socketURL = 'http://localhost:9001/';
 /*
     Cannot GET /socket.io/
       ?userid=64436r5sw4rts44wvg6a2
@@ -115,7 +117,6 @@ connection.onopen = function() {
 
 };
 connection.onclose = function() {
-    console.log('ON CLOSE TEST', connection.getAllParticipants());
   if (connection.getAllParticipants().length) {
     document.querySelector('#roomStatusText').innerHTML = 'You are still connected with: ' + connection.getAllParticipants().join(', ');
   } else {

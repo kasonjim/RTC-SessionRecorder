@@ -1,0 +1,19 @@
+{
+  "name": "rtc-session-recorder",
+  "version": "1.0.0",
+  "description": "Test for main thesis project",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server/server.js",
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kasonjim/RTC-SessionRecorder.git"
+  },
+  "author": "",
+  "dependencies": {
+    "express": "^4.15.2",
+    "socket.io": "^1.7.3"
+  }
+}
