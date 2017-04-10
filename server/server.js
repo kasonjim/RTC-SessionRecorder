@@ -47,65 +47,42 @@ var port = process.env.SOCKETIO_PORT || 443;
 var server;
 isUseHTTPs ? server = http.createServer(options, express) : server = http.createServer(express);
 
-var runServer = function() {
-  server.on('error', function(e) {
-    if (e.code === 'EADDRINUSE') {
-      var socketURL = (isUseHTTPs ? 'https' : 'http') + '://' + e.address + ':' + e.port + '/';
-      console.log('\x1b[31m%s\x1b[0m ', '[EADDRINUSE] Unable to listen on port: ' + e.port + '. ' + socketURL + ' is already in use.');
+server.on('error', function(e) {
+  if (e.code === 'EADDRINUSE') {
+    var socketURL = (isUseHTTPs ? 'https' : 'http') + '://' + e.address + ':' + e.port + '/';
+    console.log('\x1b[31m%s\x1b[0m ', '[EADDRINUSE] Unable to listen on port: ' + e.port + '. ' + socketURL + ' is already in use.');
+  }
+});
+
+server = server.listen(port, process.env.IP || '127.0.0.1', function(error) {
+  var addr = server.address();
+  var domainURL = (isUseHTTPs ? 'https' : 'http') + '://' + addr.address + ':' + addr.port + '/';
+
+  console.log('[socket.io server] connection.socketURL = "' + domainURL + '";');
+
+  if (addr.address !== '127.0.0.1' && !isUseHTTPs) {
+    console.log('\x1b[31m%s\x1b[0m ', 'Please set isUseHTTPs=true to make sure audio,video and screen demos can work on Google Chrome as well.');
+  }
+});
+
+require('./rtc-dependencies/Signaling-Server.js')(server, function(socket) {
+  try {
+    var params = socket.handshake.query;
+
+    // "socket" object is totally in your own hands! Do whatever you want!
+    // In your HTML page, you can access socket as following:
+        // connection.socketCustomEvent = 'custom-message';
+        // var socket = connection.getSocket();
+        // socket.emit(connection.socketCustomEvent, { test: true });
+
+    if (!params.socketCustomEvent) {
+      params.socketCustomEvent = 'custom-message';
     }
-  });
 
-  server = server.listen(port, process.env.IP || '127.0.0.1', function(error) {
-    var addr = server.address();
-    var domainURL = (isUseHTTPs ? 'https' : 'http') + '://' + addr.address + ':' + addr.port + '/';
-
-    console.log('[socket.io server] connection.socketURL = "' + domainURL + '";');
-
-    if (addr.address !== '127.0.0.1' && !isUseHTTPs) {
-      console.log('\x1b[31m%s\x1b[0m ', 'Please set isUseHTTPs=true to make sure audio,video and screen demos can work on Google Chrome as well.');
-    }
-  });
-
-  require('./rtc-dependencies/Signaling-Server.js')(server, function(socket) {
-    try {
-      var params = socket.handshake.query;
-
-      // "socket" object is totally in your own hands!
-      // do whatever you want!
-
-      // in your HTML page, you can access socket as following:
-      // connection.socketCustomEvent = 'custom-message';
-      // var socket = connection.getSocket();
-      // socket.emit(connection.socketCustomEvent, { test: true });
-
-      if (!params.socketCustomEvent) {
-        params.socketCustomEvent = 'custom-message';
-      }
-
-      socket.on(params.socketCustomEvent, function(message) {
-        try {
-          socket.broadcast.emit(params.socketCustomEvent, message);
-        } catch (e) {}
-      });
-    } catch (e) {}
-  });
-};
-
-// force auto reboot on failures
-var autoRebootServerOnFailure = false;
-if (autoRebootServerOnFailure) {
-  // auto restart server on failure
-  var cluster = require('cluster');
-  if (cluster.isMaster) {
-    cluster.fork();
-    cluster.on('exit', function(worker, code, signal) {
-      cluster.fork();
+    socket.on(params.socketCustomEvent, function(message) {
+      try {
+        socket.broadcast.emit(params.socketCustomEvent, message);
+      } catch (e) {}
     });
-  }
-
-  if (cluster.isWorker) {
-    runServer();
-  }
-} else {
-  runServer();
-}
+  } catch (e) {}
+});
