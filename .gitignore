@@ -1,0 +1,16 @@
+.DS_Store
+._*
+
+# Files that might appear on external disk
+node_modules
+bower_components
+npm-debug.log
+
+# Floobits
+.floo
+.floobit
+.flooignore
+
+# Local development
+*.env
+*.dev
