@@ -20,8 +20,8 @@ var showRoomURL = function(roomid) {
 };
 
 var hideRoomURL = function() {
-  document.querySelector('#roomStatusText').innerHTML = 'Entire session has been closed.';
-  document.querySelector('#userRoleText').innerHTML = '';
+  document.getElementById('roomStatusText').innerHTML = 'Entire session has been closed.';
+  document.getElementById('userRoleText').innerHTML = '';
   document.getElementById('room-urls').innerHTML = '';
   document.getElementById('room-urls').style.display = 'none';
 };
