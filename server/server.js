@@ -1,5 +1,5 @@
 /*
- * All credit for original server configuration, including Signaling-Server.js, goes to:
+ * All credit for base server configuration, including Signaling-Server.js, goes to:
  * Muaz Khan      - www.MuazKhan.com
  * MIT License    - www.WebRTC-Experiment.com/licence
  * Documentation  - github.com/muaz-khan/RTCMultiConnection
@@ -7,9 +7,28 @@
 
 /*
  * Environment variables
- * SOCKETIO_PORT (default: 443)
- * USE_HTTPS (default: false)
- * IP (default: 127.0.0.1)
+ *   SOCKETIO_PORT (default: 443)
+ *   USE_HTTPS (default: false)
+ *   IP (default: 127.0.0.1)
+*/
+
+/*
+const express = require('express');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+var path = require('path');
+
+const app = express();
+
+app.use(morgan('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, '../')));
+
+
+const port = process.env.PORT || 3000;
+app.listen(port);
+console.log(`Listening on port: ${port}`);
 */
 
 ///////////////////////////////////////
@@ -32,20 +51,20 @@ var resolveURL = function(url) {
 };
 
 // see how to use a valid certificate: // https://github.com/muaz-khan/WebRTC-Experiment/issues/62
-var options = {
+var httpsOptions = {
   key: fs.readFileSync(path.join(__dirname, resolveURL('rtc-dependencies/fake-keys/privatekey.pem'))),
   cert: fs.readFileSync(path.join(__dirname, resolveURL('rtc-dependencies/fake-keys/certificate.pem')))
 };
 
-////////////////////////////////////////////////
-///////////////// SERVER SETUP /////////////////
-////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+///////////////// SOCKET IO SERVER SETUP /////////////////
+//////////////////////////////////////////////////////////
 var express = require('express')();
 var http = require(isUseHTTPs ? 'https' : 'http');
 var port = process.env.SOCKETIO_PORT || 443;
 
 var server;
-isUseHTTPs ? server = http.createServer(options, express) : server = http.createServer(express);
+isUseHTTPs ? server = http.createServer(httpsOptions, express) : server = http.createServer(express);
 
 server.on('error', function(e) {
   if (e.code === 'EADDRINUSE') {
