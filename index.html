@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <div id="elementToShare" contenteditable style="margin-top: 3px;">
+    <div id="elementToShare" style="margin-top: 3px;">
         <header>
             <h2>DEE SEE V2</h2>
             <div id="roomStatusText"></div>
@@ -22,24 +22,24 @@
     </div>
 
     <div id="recordControls">
-        <button id="start" contenteditable="false">Start Canvas Recording</button>
-        <button id="stop" disabled contenteditable="false">Stop</button>
-        <button id="save" disabled contenteditable="false">Processes &amp; Save</button>
+        <button id="start">Start Canvas Recording</button>
+        <button id="stop" disabled>Stop</button>
+        <button id="save" disabled>Processes &amp; Save</button>
         <div id="room-urls"></div>
     </div>
 
+    <!-- Required library files -->
     <script src="./lib/screenshot.js"></script>
-    <script src="./lib/RecordRTC.js"></script>
-    <script src="./lib/RTCMultiConnection.js"></script>
-    <script src="./lib/socket.io.js"></script>
+    <script src="./lib/RecordRTC.min.js"></script>
+    <script src="./lib/RTCMultiConnection.min.js"></script>
+    <script src="./lib/getMediaElement.js"></script>
+    <script src="./lib/socket.io.min.js"></script>
 
+    <!-- Custom function files - MUST BE IN ORDER -->
+    <!-- helper, recorder, rtc-multi, lobby -->
     <script src="./js/helpers.js"></script>
     <script src="./js/recorder.js"></script>
     <script src="./js/rtc-multi.js"></script>
     <script src="./js/lobby.js"></script>
-
-    <!-- custom layout for HTML5 audio/video elements -->
-    <script src="https://cdn.webrtc-experiment.com/getMediaElement.js"></script>
-    <script src="https://cdn.webrtc-experiment.com:443/FileBufferReader.js"></script>
 </body>
 </html>

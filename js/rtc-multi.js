@@ -5,7 +5,7 @@
 var connection = new RTCMultiConnection();
 // connection.socketURL = '/';
 // connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
-connection.socketURL = 'http://localhost:443/';
+connection.socketURL = 'http://localhost:' + socketPort + '/';
 
 // Initial connection setup
 connection.socketMessageEvent = 'interviewer.dc-room';
@@ -52,22 +52,25 @@ connection.onopen = function() {
   if (!connection.isInitiator) {
     document.getElementById('recordControls').style.display = 'none';
   }
-  updateCloseLeaveButton();
-
-  document.getElementById('close-room').disabled = false;
-  setRoomStatusText('You are connected with: ' + connection.getAllParticipants().join(', '));
+  updateCloseLeaveButton(false);
+  setRoomStatusText('You are connected to: ' + connection.getAllParticipants().join(', '));
 };
 
 connection.onclose = function() {
+  // Known bug: the count is always ahead by 1
+  // If 2 other people are in room, and one leaves, count will be 2
+  // If the last person leaves, count will be 1
+  // Events are delayed "1 person"
+  // If same person leaves and joins the room, there will be 2 unique instances (one expired, one new)
   if (connection.getAllParticipants().length) {
-    setRoomStatusText('You are still connected with: ' + connection.getAllParticipants().join(', '));
+    setRoomStatusText('You are still connected to: ' + connection.getAllParticipants().join(', '));
   } else {
     setRoomStatusText('Seems session has been closed or all participants left.');
   }
 };
 
 connection.onEntireSessionClosed = function(event) {
-  document.getElementById('close-room').disabled = true;
+  updateCloseLeaveButton(true);
   connection.isInitiator ? enableInputButtons() : disableInputButtons();
 
   connection.attachStreams.forEach(function(stream) {

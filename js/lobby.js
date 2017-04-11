@@ -4,19 +4,18 @@
 document.getElementById('open-room').onclick = function() {
   connection.open(getRoomId(), function() {
     disableInputButtons();
-    updateCloseLeaveButton();
+    updateCloseLeaveButton(false);
     showRoomURL(connection.sessionid);
 
     setUserRoleText('IS YOU THE ADMIN? ' + connection.isInitiator);
     setRoomStatusText('<h2>Waiting for participant(s) to join</h2>');
-    document.getElementById('close-room').disabled = false;
   });
 };
 
 document.getElementById('join-room').onclick = function() {
   connection.checkPresence(getRoomId(), function(isRoomExist, roomid) {
     disableInputButtons();
-    updateCloseLeaveButton();
+    updateCloseLeaveButton(true);
 
     if (isRoomExist) {
       connection.join(roomid, function() {

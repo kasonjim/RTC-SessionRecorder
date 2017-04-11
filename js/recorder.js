@@ -1,7 +1,6 @@
 ///////////////////////////////////////////////////////////////
 //////////////////////   RECORDER Code   //////////////////////
 ///////////////////////////////////////////////////////////////
-
 // Initial setup
 window.onbeforeunload = function() {
   document.getElementById('start').disabled = false;
@@ -30,6 +29,19 @@ var currentVideoBlob;
 var canvasRecorder = new CanvasRecorder(canvas2d, {
   disableLogs: true
 });
+
+// Defining the audioRecorder instance
+var audioRecorder;
+var currentAudioBlob;
+navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
+  audioRecorder = new MediaStreamRecorder(stream, {
+    mimeType: 'audio/webm', // audio/webm or audio/ogg or audio/wav
+    bitsPerSecond: 16 * 8 * 1000,
+    getNativeBlob: true   // default is false
+  });
+}).catch(function(err) {
+  console.error('Media Error: ', err);
+})
 
 // Constantly checks state of recording/not-recording
 var looper = function() {
@@ -62,9 +74,11 @@ document.getElementById('start').onclick = function() {
   isRecordingStarted = true;
   // Reset data
   canvasRecorder.clearRecordedData();
+  audioRecorder.clearRecordedData();
 
   // Start recording
   canvasRecorder.record();
+  audioRecorder.record();
 
   setTimeout(function() {
     document.getElementById('stop').disabled = false;
@@ -79,21 +93,29 @@ document.getElementById('stop').onclick = function() {
   isStoppedRecording = true;
   isRecordingStarted = false;
 
-  canvasRecorder.stop(function(blob) {
-    currentVideoBlob = blob;
-    document.getElementById('save').disabled = false;
-    looper();
+  canvasRecorder.stop(function(vBlob) {
+    currentVideoBlob = vBlob;
+    audioRecorder.stop(function(aBlob) {
+      currentAudioBlob = aBlob;
+      document.getElementById('save').disabled = false;
+
+      console.log('VIDEO BLOB', currentVideoBlob);
+      console.log('AUDIO BLOB', currentAudioBlob);
+    })
   });
+
+  looper();
 };
 
 // Button action for "SAVE"
 document.getElementById('save').onclick = function() {
-  console.log('VIDEO BLOB', currentVideoBlob);
   convertStreams();
 };
 
 var convertStreams = function() {
   var date = new Date();
   var formatted = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} (${date.getTime()})`;
+
   invokeSaveAsDialog(currentVideoBlob, 'DC ' + formatted + '.webm');
+  invokeSaveAsDialog(currentAudioBlob, 'DC ' + formatted + '.wav');
 };

@@ -1,6 +1,8 @@
 //////////////////////////////////////////////////////////////
 /////////////////////  HELPER FUNCTIONS  /////////////////////
 //////////////////////////////////////////////////////////////
+var socketPort = 1337;
+
 var getRoomId = function() {
   return document.getElementById('room-id').value;
 };
@@ -38,7 +40,9 @@ var enableInputButtons = function() {
 };
 
 // Helper function to change text of leave/close room based on role
-var updateCloseLeaveButton = function(){
+var updateCloseLeaveButton = function(state){
+  document.getElementById('close-room').disabled = state;
+
   if (connection.isInitiator) {
     document.getElementById('close-room').innerText = 'Close Room';
   } else {
