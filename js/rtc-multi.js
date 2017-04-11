@@ -55,14 +55,14 @@ connection.onopen = function() {
   updateCloseLeaveButton();
 
   document.getElementById('close-room').disabled = false;
-  document.querySelector('#roomStatusText').innerHTML = 'You are connected with: ' + connection.getAllParticipants().join(', ');
+  setRoomStatusText('You are connected with: ' + connection.getAllParticipants().join(', '));
 };
 
 connection.onclose = function() {
   if (connection.getAllParticipants().length) {
-    document.querySelector('#roomStatusText').innerHTML = 'You are still connected with: ' + connection.getAllParticipants().join(', ');
+    setRoomStatusText('You are still connected with: ' + connection.getAllParticipants().join(', '));
   } else {
-    document.querySelector('#roomStatusText').innerHTML = 'Seems session has been closed or all participants left.';
+    setRoomStatusText('Seems session has been closed or all participants left.');
   }
 };
 
@@ -79,8 +79,8 @@ connection.onEntireSessionClosed = function(event) {
     return;
   }
 
-  document.querySelector('#roomStatusText').innerHTML = 'Entire session has been closed by the moderator: ' + event.userid;
-  document.querySelector('#userRoleText').innerHTML = '';
+  setRoomStatusText('Entire session has been closed by moderator: ' + event.userid);
+  setUserRoleText('');
 };
 
 // If room already exist

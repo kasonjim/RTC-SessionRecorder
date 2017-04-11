@@ -45,3 +45,12 @@ var updateCloseLeaveButton = function(){
     document.getElementById('close-room').innerText = 'Leave Room';
   }
 };
+
+// Change text on screen
+var setRoomStatusText = function(str) {
+  document.querySelector('#roomStatusText').innerHTML = str;
+};
+
+var setUserRoleText = function(str) {
+  document.querySelector('#userRoleText').innerHTML = str;
+};

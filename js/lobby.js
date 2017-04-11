@@ -7,8 +7,8 @@ document.getElementById('open-room').onclick = function() {
     updateCloseLeaveButton();
     showRoomURL(connection.sessionid);
 
-    document.querySelector('#userRoleText').innerHTML = 'IS YOU THE ADMIN? ' + connection.isInitiator;
-    document.querySelector('#roomStatusText').innerHTML = '<h2>Waiting for participant(s) to join</h2>';
+    setUserRoleText('IS YOU THE ADMIN? ' + connection.isInitiator);
+    setRoomStatusText('<h2>Waiting for participant(s) to join</h2>');
     document.getElementById('close-room').disabled = false;
   });
 };
@@ -20,11 +20,11 @@ document.getElementById('join-room').onclick = function() {
 
     if (isRoomExist) {
       connection.join(roomid, function() {
-        document.querySelector('#userRoleText').innerHTML = 'IS YOU THE ADMIN? ' + connection.isInitiator;
+        setUserRoleText('IS YOU THE ADMIN? ' + connection.isInitiator);
       });
     } else {
       enableInputButtons();
-      document.querySelector('#roomStatusText').innerHTML = 'Room does not exist!';
+      setRoomStatusText('Room does not exist!');
     }
   });
 };
