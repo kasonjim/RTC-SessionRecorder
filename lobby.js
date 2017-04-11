@@ -60,6 +60,7 @@ var connection = new RTCMultiConnection();
 // comment-out below line if you do not have your own socket.io server
 // connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
 connection.socketURL = 'http://localhost:443/';
+// connection.socketURL = 'http://idc-socket-server.herokuapp.com:443/';
 /*
     Cannot GET /socket.io/
       ?userid=64436r5sw4rts44wvg6a2

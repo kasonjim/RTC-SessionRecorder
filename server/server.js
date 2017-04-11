@@ -1,3 +1,6 @@
+// This server file has been finalized for the main repo on 2017/05/10
+// Patches and changes will be applied directly to the main project "interviewer.dc"
+
 /*
  * All credit for base server configuration, including Signaling-Server.js, goes to:
  * Muaz Khan      - www.MuazKhan.com
