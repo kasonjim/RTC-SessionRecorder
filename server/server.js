@@ -12,25 +12,6 @@
  *   IP (default: 127.0.0.1)
 */
 
-/*
-const express = require('express');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
-var path = require('path');
-
-const app = express();
-
-app.use(morgan('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, '../')));
-
-
-const port = process.env.PORT || 3000;
-app.listen(port);
-console.log(`Listening on port: ${port}`);
-*/
-
 ///////////////////////////////////////
 //////////////// HTTPS ////////////////
 ///////////////////////////////////////
@@ -73,16 +54,14 @@ server.on('error', function(e) {
   }
 });
 
-server = server.listen(port, process.env.IP || '127.0.0.1', function(error) {
-  var addr = server.address();
-  var domainURL = (isUseHTTPs ? 'https' : 'http') + '://' + addr.address + ':' + addr.port + '/';
-
-  console.log('[socket.io server] connection.socketURL = "' + domainURL + '";');
-
-  if (addr.address !== '127.0.0.1' && !isUseHTTPs) {
-    console.log('\x1b[31m%s\x1b[0m ', 'Please set isUseHTTPs=true to make sure audio,video and screen demos can work on Google Chrome as well.');
-  }
-});
+server = server.listen(port);
+console.log('[socket.io server port]: ' + port);
+// var addr = server.address();
+// var domainURL = (isUseHTTPs ? 'https' : 'http') + '://' + addr.address + ':' + addr.port + '/';
+// console.log('[socket.io server] connection.socketURL = "' + domainURL + '";');
+// if (addr.address !== '127.0.0.1' && !isUseHTTPs) {
+//   console.log('\x1b[31m%s\x1b[0m ', 'Please set isUseHTTPs=true to make sure audio,video and screen demos can work on Google Chrome as well.');
+// }
 
 require('./rtc-dependencies/Signaling-Server.js')(server, function(socket) {
   try {
