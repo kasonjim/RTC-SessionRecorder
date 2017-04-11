@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>DEE SEE</title>
-    <link rel="stylesheet" type="text/css" href="recorder-style.css">
+    <!-- <link rel="stylesheet" type="text/css" href="recorder-style.css"> -->
     <link rel="stylesheet" type="text/css" href="lobby-style.css">
 </head>
 <body>
@@ -24,31 +24,35 @@
     <script src="./lib/RecordRTC.js"></script>
     <script src="./lib/gumadapter.js"></script>
     <script src="recorder.js"></script>
- -->
     <hr><hr>
+ -->
     <!-- =============================================================== -->
-    <header>
-        <h1>DEE SEE V2</h1>
-        <div id="roomStatusText"></div>
-        <div id="userRoleText"></div>
-    </header>
+    <div id="elementToShare" contenteditable style="margin-top: 3px;">
+        <header>
+            <h2>DEE SEE V2</h2>
+            <div id="roomStatusText"></div>
+            <div id="userRoleText"></div>
+        </header>
 
-    <div class="make-center">
         <input type="text" id="room-id" value="default">
         <button id="open-room">Open Room</button>
-        <button id="join-room">Join Room</button><br />
-        "Open Room" button should ONLY show for admin. Do some role-based rendering<br />
-        User will land on this room page and then "wait" for the room to open.<br />
-        Once the admin hits "Open Room", the other user will automatically connect.
-
+        <button id="join-room">Join Room</button>
         <br /><br />
         <button id="close-room" disabled>Waiting for session...</button>
 
+        <div id="videos-container"></div>
+    </div>
+
+
+    <div id="recordControls">
+        <button id="start" contenteditable="false">Start Canvas Recording</button>
+        <button id="stop" disabled contenteditable="false">Stop</button>
+        <button id="save" disabled contenteditable="false">Processes &amp; Save</button>
         <div id="room-urls"></div>
     </div>
 
-    <div id="videos-container"></div>
-
+    <script src="./lib/screenshot.js"></script>
+    <script src="./lib/RecordRTC.js"></script>
     <script src="./lib/RTCMultiConnection.js"></script>
     <script src="./lib/socket.io.js"></script>
     <script src="lobby.js"></script>
