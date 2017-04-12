@@ -56,6 +56,7 @@ var roomParams = function() {
     params[d(match[1])] = d(match[2]);
   }
   window.params = params;
+  console.log(window.location)
 };
 roomParams();
 
@@ -69,17 +70,10 @@ if (localStorage.getItem(connection.socketMessageEvent)) {
 document.getElementById('room-id').value = roomid;
 document.getElementById('room-id').onkeyup = function() {
   localStorage.setItem(connection.socketMessageEvent, this.value);
+  console.log(this.value);
 };
 
-var hashString = location.hash.replace('#', '');
-if (hashString.length && hashString.indexOf('comment-') === 0) {
-  hashString = '';
-}
-
 var roomid = params.roomid;
-if (!roomid && hashString.length) {
-  roomid = hashString;
-}
 
 if (roomid && roomid.length) {
   document.getElementById('room-id').value = roomid;
